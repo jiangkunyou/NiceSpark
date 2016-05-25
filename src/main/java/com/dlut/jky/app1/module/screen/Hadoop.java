@@ -37,9 +37,9 @@ public class Hadoop {
             // 获取需要运行的算法的mahout命令
             Algorithm algorithm = algorithmService.getAlgorithmById(Integer.parseInt(algorId));
             // 暂时注掉下面这行, 演示完取消注释
-//            SSHHelper.ssh("source /etc/profile;" + algorithm.getAlgorCommand());
+            SSHHelper.ssh("source /etc/profile;" + algorithm.getAlgorCommand());
             // 为了演示, 点进lda算法, 但是其实运行kmeans
-            SSHHelper.ssh("source /etc/profile;$MAHOUT_HOME/bin/mahout org.apache.mahout.clustering.syntheticcontrol.kmeans.Job");
+//            SSHHelper.ssh("source /etc/profile;$MAHOUT_HOME/bin/mahout org.apache.mahout.clustering.syntheticcontrol.kmeans.Job");
             response.getWriter().print("success");
         } catch (IOException e) {
             try {
