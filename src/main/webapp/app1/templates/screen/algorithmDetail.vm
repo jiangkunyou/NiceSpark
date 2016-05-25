@@ -1,0 +1,154 @@
+#*
+Created by IntelliJ IDEA.
+User: jiangkunyou
+Date: 15/11/306
+算法详情页面
+*#
+
+#* @vtlvariable name="algorithm" type="com.dlut.jky.app1.beans.Algorithm" *#
+
+$page.addBodyAttribute("class", "no-js")
+##$page.addStyleSheet("$assetsContent.getURI('myCss/table.css')")
+##$page.addScript("$assetsContent.getURI('js/jquery1.11.1.min.js')")
+$page.addScript("$assetsContent.getURI('myJs/jquery-1.7.2.js')")
+$page.addScript("$assetsContent.getURI('myJs/ajaxfileupload.js')")
+$page.addScript("$assetsContent.getURI('myJs/algorithmDetail.js')")
+
+<div class="myhero">
+    <div class="admin-content" id="myContent" style="text-align: center; width: 100%">
+        <form action="" method="post" id="uploadform" name="uploadform" style="margin-top: 20px;margin-bottom: 40px">
+            <input type="hidden" value="$!algorithm.algorId">
+
+            <div>
+                <div class="transparentTap" style="margin: 40px;
+                                                   border-color: transparent;
+                                                   background-color: rgba(0, 0, 0,.6);
+                                                   color: #fff">
+                    <div style="font-family: 'Syncopate';
+                            font-size: medium;
+                            text-transform: uppercase;
+                            text-align: left;
+                            margin-left: 10px;margin-top: 20px">
+                        $!algorithm.algorName
+                    </div>
+                    <img src="#if($!algorithm.classId == 1)
+                                  $!assetsContent.getURI('i/classifer/julei2.png')
+                              #elseif($!algorithm.classId == 2)
+                                  $!assetsContent.getURI('i/classifer/fenlei2.png')
+                              #elseif($!algorithm.classId == 3)
+                                  $!assetsContent.getURI('i/classifer/jiangwei2.png')
+                              #else
+                                  $!assetsContent.getURI('i/classifer/zini2.png')
+                              #end"
+                         style="margin-top: 80px">
+                </div>
+
+                <div class="transparentTap" style="margin: 40px;
+                    border-color:transparent; transform: rotate(-5deg); background-color: rgba(0, 0, 0,.6); color: #fff">
+                    <div style="font-family: 'Syncopate';
+                                        font-size: medium;
+                                        text-transform: uppercase;
+                                        text-align: left;
+                                        margin-left: 10px;margin-top: 20px">
+                        $!algorithm.algorAuthor
+                    </div>
+                    <img src="$!assetsContent.getURI('i/algorithmInfo/author2.png')"
+                         style="margin-top: 80px">
+                </div>
+
+                <div class="transparentTap" style="margin: 40px; transform: rotate(8deg);
+                    border-color:transparent; background-color: rgba(0, 0, 0,.6); color: #fff">
+                    <div style="font-family: 'Syncopate';
+                        font-size: medium;
+                        text-transform: uppercase;
+                        text-align: left;
+                        margin-left: 10px;margin-top: 20px">
+                        $!algorithm.algorModify.toLocaleString().subSequence(0, 9)
+                    </div>
+                    <img src="$!assetsContent.getURI('i/algorithmInfo/time2.png')"
+                         style="margin-top: 80px">
+                </div>
+            </div>
+
+
+            <div class="transparentTapBig" style="margin: 30px;
+                                            border-color:transparent;
+                                            transform: rotate(-5deg);
+                                            background-color: rgba(0, 0, 0,.6);">
+<textarea class="textareaStyle" style="color: #fff" rows="11" cols="40" disabled>
+    $!algorithm.algorDescrib
+</textarea>
+                <img src="$!assetsContent.getURI('i/algorithmInfo/simpleinfo2.png')"
+                     style="margin-top: 10px; margin-left: 280px">
+            </div>
+
+            <div class="transparentTapBig" style="margin: 30px; border-color:transparent; background-color: rgba(0, 0, 0,.6);">
+<textarea class="textareaStyle" style="color: #fff" rows="11" cols="40" disabled>
+    $!algorithm.algorCareful
+</textarea>
+                <img src="$!assetsContent.getURI('i/algorithmInfo/careful.png')"
+                     style="margin-top: 10px; margin-left: 280px">
+            </div>
+
+##          具体使用算法的四个步骤
+            <div style="margin-top: 50px; margin-bottom: 80px">
+
+            ##              选择文件(这里不支持IE)
+                <input id="inputfile" type="file" accept=".zip"
+                       name="inputfile" enctype="multipart/form-data" style="visibility: hidden; position: absolute;" />
+                <button class="am-btn am-btn-default transparentGreyButton"
+                        onclick="inputfile.click(); return false;"
+                        id="selectFileBtn">
+                    1
+                </button>
+
+            ##      查看选中文件
+                <button id="checkfile"
+                        class="am-btn am-btn-default transparentGreyButton am-disabled"
+                        data-am-offcanvas="{target: '#doc-oc-1', effect: 'push'}">
+                    2
+                </button>
+
+            ##      上传数据
+                <input type="button" id="uploadfilebtn"
+                       class="am-btn am-btn-default transparentGreyButton am-disabled"
+                       value="3">
+
+            ##      运行算法
+                <input type="button"
+                       id="runAlgorithmBtn" name="$!app1Link.setTarget('runAlgorithm.vm')?algorId=$!algorithm.algorId"
+                       class="am-btn am-btn-default transparentGreyButton am-disabled"
+                       value="4">
+            </div>
+        </form>
+
+    ##        模态框 放在这里才不会灰色
+        <div class="am-modal am-modal-loading am-modal-no-btn" tabindex="-1" id="my-modal-loading">
+            <div class="am-modal-dialog">
+                <div class="am-modal-hd" id="uploading" style="font-family: 'Syncopate'"></div>
+                <div class="am-modal-bd">
+                    <span class="am-icon-spinner am-icon-spin"></span>
+                </div>
+            </div>
+        </div>
+
+    ##        <input type="hidden" class="am-btn am-btn-primary" data-am-modal="{target: '#my-alert'}" id="uploadresult"/>
+        <div class="am-modal am-modal-alert" tabindex="-1" id="my-alert">
+            <div class="am-modal-dialog">
+                <div class="am-modal-hd"></div>
+                <div class="am-modal-bd" id="alertcontent" style="font-family: 'Syncopate';">
+                </div>
+            </div>
+        </div>
+
+    ##        侧边栏视图
+        <div id="doc-oc-1" class="am-offcanvas">
+            <div class="am-offcanvas-bar">
+                <div class="am-offcanvas-content am-align-left">
+                ##                    侧边栏内容
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
